@@ -354,10 +354,13 @@ app.controller('myCtrl', ["cxNetworkUtils", "$scope", "$http", "$window", "$log"
         FD.append('plan', blob);
         FD.append('upload', blob2);
         FD.append('name', 'Test upload');
+        console.log($scope.searchResults.selectedTemplate);
         if($scope.searchResults.selectedTemplate.hasOwnProperty('uuid')){
             FD.append('template', $scope.searchResults.selectedTemplate.uuid);
+            console.log("Style template found");
         } else {
             FD.append('template', "");
+            console.log("No style template found");
         }
         FD.append('description', 'Test upload description');
 
