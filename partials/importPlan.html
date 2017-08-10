@@ -162,13 +162,13 @@
         <table ng-show="showMore.export" style="margin: 15px 0px 15px 15px;">
             <tr>
                 <td>
-                    <button ng-show="showMore.export" class="btn btn-success" ng-click="exportPlan()">Export Plan</button> &nbsp;
+                    <button ng-show="showMore.export" class="btn btn-success" ng-click="exportPlan()" style="margin-right: 10px;">Process File</button> &nbsp;
                 </td>
                 <td ng-show="uiHelper.showLoading">
                     <div id="isLoading" style="margin-left: 0px; margin-right: 10px;"></div>
                 </td>
                 <td>
-                    <div style="margin-right: 50px; cursor: pointer;">
+                    <div style="margin-right: 20px; cursor: pointer;">
                         <a ng-click="saveHelper.savePlan = !saveHelper.savePlan" style="text-decoration: none; color: #656565;">
                             <div style="width: 98px;">
                                 <span class="fa-stack" ng-show="!saveHelper.savePlan">

@@ -101,27 +101,31 @@ app.directive('graphPreview', function($timeout) {
         var edgeArray = [];
 
         nodeArray.push({id: 1, label: "SOURCE", font: {size: 20}, borderWidth: 4,
-            color: {'background': "#13FFFF", 'border': '#2400FF'}, x: 0, y: 0,
+            color: {'background': "#13FFFF", 'border': '#2400FF'}, x: -150, y: 0,
             shape: "square", size: 20, permaSize: 20, nodeDegree: 20});
 
         nodeArray.push({id: 2, label: "TARGET", font: {size: 20}, borderWidth: 4,
-            color: {'background': "#57FF00", 'border': '#2400FF'}, x: 300, y: 0,
+            color: {'background': "#57FF00", 'border': '#2400FF'}, x: 150, y: 0,
             shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
+
+        nodeArray.push({id: 3, label: "PREVIEW", font: {size: 26, color: '#146C8E'}, borderWidth: 0,
+            color: {'background': "#57FF00", 'border': '#2400FF'}, x: 0, y: -25,
+            shape: "text", size: 20, permaSize: 20, nodeDegree: 20});
 
         //===============================
         // nodes for setting boundaries
         //===============================
         nodeArray.push({id: 90, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -45, y:40,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -195, y:40,
             shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
         nodeArray.push({id: 91, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -45, y:-40,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -195, y:-40,
             shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
         nodeArray.push({id: 92, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 345, y:40,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 195, y:40,
             shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
         nodeArray.push({id: 93, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 345, y:-40,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 195, y:-40,
             shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
 
         var edgeArray = [];
