@@ -1,0 +1,210 @@
+<div ng-init="initSearch();">
+    <div class="row">
+        <div class="col-sm-3" style="overflow-x: hidden;">
+            <input type="file" file-reader="fileContent" csv-sample="csvSampleArray" file-header="info.fileHeader" ng-click="clearBoxes()"/>
+        </div>
+        <div class="col-sm-7">
+            <span ng-if="csvSampleArray">
+                <select ng-model="searchResults.selected" ng-change="load_selected_plan()" ng-options="x.plan_name for x in searchResults.plans"><option value="">- Recent import plans -</option></select>
+            </span>
+        </div>
+        <div class="col-sm-2">
+        </div>
+    </div>
+
+    <p>&nbsp;</p>
+    <div class="row">
+        <div class="col-sm-12">
+            <graph-preview preview-source="info.sp.source_plan.node_name_column_preview" preview-source-column="info.sp.source_plan.node_name_column"></graph-preview>
+        </div>
+    </div>
+
+
+    <!--==================-->
+    <!-- PREVIEW TABLE    -->
+    <!--==================-->
+    <div ng-if="csvSampleArray" style="overflow-x: auto;" ng-init="viewRows=3">
+        <table class="table table-striped" style="margin-bottom: 5px;">
+            <tr ng-if="$index == 0" ng-repeat="csvLine in csvSampleArray">
+                <td><a ng-click="clearSelectedHeader()" style="cursor: pointer;">Clear</a></td>
+
+                <td ng-repeat="tabbedItem in csvLine track by $index" style="min-width: {{tabbedItem.length * 11 + 15}}px;" ng-init="buttonSelected=false">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" ng-drag-start="dragMeStart()" ng-drag-success="dragSuccess()" ng-drop="drop()" ng-drag="true" ng-drag-data="info.fileHeader[$index]"
+                                data-allow-transform="false" data-toggle="{{info.dragOk ? 'dropdown' : ''}}" aria-haspopup="true" aria-expanded="false">
+                        {{tabbedItem}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a ng-click="onDropComplete1(info.fileHeader[$index], null, '', 'id_column')">Add as ID</a></li>
+                            <li><a ng-click="onDropComplete1(info.fileHeader[$index], null, '', 'node_name_column')">Add as Name</a></li>
+                            <li><a ng-click="onDropComplete1(info.fileHeader[$index], null, '', 'property_columns')">Add as Property</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+
+            <tr ng-if="$index != 0 && $index < 5" ng-repeat="csvLine in csvSampleArray | limitTo: uiHelper.viewRows track by $index">
+                <td>
+                    <span ng-if="$index == 1">
+                        <button type="button" ng-show="uiHelper.viewRows==3" class="btn btn-link" style="text-decoration: none;" ng-click="uiHelper.viewRows=5"><span class='fa fa-angle-double-down fa-lg'></span></button>
+                        <button type="button" ng-show="uiHelper.viewRows==5" class="btn btn-link" style="text-decoration: none;" ng-click="uiHelper.viewRows=3"><span class='fa fa-angle-double-up fa-lg'></span></button>
+                    </span>
+
+                </td>
+                <td ng-repeat="tabbedItem in csvLine track by $index">{{tabbedItem | cut:true:32:' ...'}}</td>
+            </tr>
+
+        </table>
+    </div>
+
+    <hr style="margin-top: 2px;" ng-if="csvSampleArray"/>
+
+
+    <!--==================-->
+    <!-- ACCORDIAN        -->
+    <!--==================-->
+    <div id="accordion" role="tablist" aria-multiselectable="true" ng-if="csvSampleArray">
+        <!--==================-->
+        <!-- SOURCE PLAN      -->
+        <!--==================-->
+        <div class="panel panel-default" style="margin-bottom: 3px;">
+            <div class="panel-heading" role="tab" id="headingOne">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" ng-click="showMore.sourceTab='SOURCE'" aria-expanded="true" aria-controls="collapseOne" style="cursor: pointer;">
+                        Source Plan <small>Expand this section to add source fields</small>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <import-plan-buckets plan-data="info.sp.source_plan" plan-data-display="infoDisplay.sp.source_plan" contexts="info.contextPrefixes" on-drop-complete="onDropComplete1(data, evt, planType, planElementType)" plan-type="'SOURCE'"></import-plan-buckets>
+
+            </div>
+        </div>
+        <!--==================-->
+        <!-- TARGET PLAN      -->
+        <!--==================-->
+        <div class="panel panel-default" style="margin-bottom: 3px;">
+            <div class="panel-heading" role="tab" id="headingTwo">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo" ng-click="showMore.sourceTab='TARGET'" aria-expanded="false" aria-controls="collapseTwo" style="cursor: pointer;">
+                        Target Plan <small>Expand this section to add target fields</small>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <import-plan-buckets plan-data="info.tp.target_plan" plan-data-display="infoDisplay.tp.target_plan" contexts="info.contextPrefixes" on-drop-complete="onDropComplete1(data, evt, planType, planElementType)" plan-type="'TARGET'"></import-plan-buckets>
+            </div>
+        </div>
+        <!--==================-->
+        <!-- EDGE PLAN        -->
+        <!--==================-->
+        <div class="panel panel-default" style="margin-bottom: 3px;">
+            <div class="panel-heading" role="tab" id="headingThree">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" data-target="#collapseThree" ng-click="showMore.sourceTab='EDGE'" aria-expanded="false" aria-controls="collapseThree" style="cursor: pointer;">
+                        Edge Plan <small>Expand this section to add edge fields</small>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <import-edge-buckets plan-data="info.ep.edge_plan" plan-data-display="infoDisplay.ep.edge_plan" contexts="info.contextPrefixes" on-drop-complete="onDropComplete1(data, evt, planType, planElementType)" plan-type="'EDGE'"></import-edge-buckets>
+
+            </div>
+        </div>
+        <!--==================-->
+        <!-- CONTEXTS         -->
+        <!--==================-->
+        <div class="panel panel-default" style="margin-bottom: 3px;">
+            <div class="panel-heading" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" data-target="#collapseFive" ng-click="showMore.sourceTab='CONTEXT'" aria-expanded="false" aria-controls="collapseFive" style="cursor: pointer;">
+                        Context <small>Expand this section to add context</small>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo" style="padding: 15px;">
+
+                <h4>Available contexts:</h4>
+                <div style="height: 200px; overflow-y: auto; overflow-x: hide; border: 1px #C0C0C0 solid; margin-bottom: 15px;">
+                    <div style="padding: 15px;">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr ng-repeat="context in info.contexts">
+                                    <td>
+                                        <button type="button" class="btn btn-link" style="text-decoration: none;" ng-click="addContext(context)"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+                                    </td>
+                                    <td>{{context.tag}}</td>
+                                    <td>{{context.uri}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h4>Import plan contexts:</h4>
+                <div style="height: 200px; overflow-y: auto; overflow-x: hide; border: 1px #C0C0C0 solid; margin-top: 0px;">
+                    <div style="padding: 15px;">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr ng-repeat="(k,v) in infoDisplay.context.context">
+                                    <td>{{k}}</td>
+                                    <td>{{v}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!--==================-->
+    <!-- EXPORT PREVIEW   -->
+    <!--==================-->
+    <div ng-if="csvSampleArray">
+        <table ng-show="showMore.export" style="margin: 15px 0px 15px 15px;">
+            <tr>
+                <td>
+                    <button ng-show="showMore.export" class="btn btn-success" ng-click="exportPlan()">Export Plan</button> &nbsp;
+                </td>
+                <td>
+                    <div style="margin-right: 50px; cursor: pointer;">
+                        <a ng-click="saveHelper.savePlan = !saveHelper.savePlan" style="text-decoration: none; color: #656565;">
+                            <div style="width: 98px;">
+                                <span class="fa-stack" ng-show="!saveHelper.savePlan">
+                                    <i class="fa fa-square-o fa-stack-2x" style="color: #4CAE47;"></i>
+                                </span>
+
+                                <span class="fa-stack" ng-show="saveHelper.savePlan">
+                                    <i class="fa fa-square-o fa-stack-2x" style="color: #4CAE47;"></i>
+                                    <i class="fa fa-check fa-stack-1x"></i>
+                                </span>
+                                <div class="pull-right" style="font-size: 15px; margin-top: 3px; color: #4CAE47; font-weight: bold;;">Save plan</div>
+                            </div>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group" ng-show="showMore.export" style="margin-top: 0px; margin-bottom: 0px;">
+                      <!--<label for="sel1">Select list:</label>-->
+                        <select class="form-control" id="sel1" ng-model="searchResults.selectedTemplate" ng-change="" ng-options="x.name for x in searchResults.templates"><option value="">- Optional: Select style template -</option></select>  </select>
+                    </div>
+                </td>
+                <td><button class="btn btn-default" ng-click="loadingSpinner()"></button></td>
+                <td>
+                    <div id="isLoading" style="width: 100px; margin-left: 20px;"></div>
+                </td>
+            </tr>
+        </table>
+
+        <pre class="alert alert-info" role="alert">{{infoDisplay.sp | json}}</pre>
+        <pre class="alert alert-info" role="alert">{{infoDisplay.tp | json}}</pre>
+        <pre class="alert alert-info" role="alert">{{infoDisplay.ep | json}}</pre>
+        <pre class="alert alert-info" role="alert">{{infoDisplay.context | json}}</pre>
+
+    </div>
+
+    <p>&nbsp;</p>
+
+</div>
