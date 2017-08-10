@@ -11,14 +11,7 @@
         <div class="col-sm-2">
         </div>
     </div>
-
     <p>&nbsp;</p>
-    <div class="row">
-        <div class="col-sm-12">
-            <graph-preview preview-source="info.sp.source_plan.node_name_column_preview" preview-source-column="info.sp.source_plan.node_name_column"></graph-preview>
-        </div>
-    </div>
-
 
     <!--==================-->
     <!-- PREVIEW TABLE    -->
@@ -163,10 +156,16 @@
     <!-- EXPORT PREVIEW   -->
     <!--==================-->
     <div ng-if="csvSampleArray">
+
+
+
         <table ng-show="showMore.export" style="margin: 15px 0px 15px 15px;">
             <tr>
                 <td>
                     <button ng-show="showMore.export" class="btn btn-success" ng-click="exportPlan()">Export Plan</button> &nbsp;
+                </td>
+                <td ng-show="uiHelper.showLoading">
+                    <div id="isLoading" style="margin-left: 0px; margin-right: 10px;"></div>
                 </td>
                 <td>
                     <div style="margin-right: 50px; cursor: pointer;">
@@ -191,9 +190,8 @@
                         <select class="form-control" id="sel1" ng-model="searchResults.selectedTemplate" ng-change="" ng-options="x.name for x in searchResults.templates"><option value="">- Optional: Select style template -</option></select>  </select>
                     </div>
                 </td>
-                <td><button class="btn btn-default" ng-click="loadingSpinner()"></button></td>
                 <td>
-                    <div id="isLoading" style="width: 100px; margin-left: 20px;"></div>
+                    <graph-preview preview-source="info.sp.source_plan.node_name_column_preview" preview-target="info.tp.target_plan.node_name_column_preview" preview-source-column="info.sp.source_plan.node_name_column"></graph-preview>
                 </td>
             </tr>
         </table>

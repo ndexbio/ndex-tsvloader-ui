@@ -66,7 +66,7 @@
                 </div>
             </div>
             <div ng-if="planData.property_columns" class="btn-group" role="group" aria-label="...">
-                <h5 ng-repeat="prevItem in planData.property_columns_preview" ng-show="$index < 1">
+                <h5 ng-repeat="prevItem in planData.property_columns_preview track by $index" ng-show="$index < 1">
                     <span class="label label-primary">Sample:</span> {{prevItem}}
                 </h5>
                <!-- <button class="btn btn-orange-light" ng-drag="false" ng-repeat="prevItem in planData.property_columns_preview" ng-show="$index < 3" style="margin-left: 1px;" ng-center-anchor="{{centerAnchor}}">

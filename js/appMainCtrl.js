@@ -36,7 +36,8 @@ app.controller('myCtrl', ["cxNetworkUtils", "$scope", "$http", "$window", "$log"
     };
 
     $scope.uiHelper = {
-        viewRows: 3
+        viewRows: 3,
+        showLoading: false
     };
 
     $scope.saveHelper = {
@@ -398,6 +399,7 @@ app.controller('myCtrl', ["cxNetworkUtils", "$scope", "$http", "$window", "$log"
 
 
     $scope.exportPlan = function(){
+        $scope.uiHelper.showLoading = true;
       $('#isLoading').html('<span class="fa fa-spinner fa-2x fa-pulse"></span>');
 
         var returnJson = {
@@ -477,7 +479,8 @@ app.controller('myCtrl', ["cxNetworkUtils", "$scope", "$http", "$window", "$log"
 
         $scope.createCXNetwork(rawCX, returnJson,
             function (newNetworkURL) {
-                $('#isLoading').html('<h3>Done!</h3>');
+                $('#isLoading').html('<span class="fa fa-check fa-2x" style="color: #4CAE47;"></span>');
+
             },
             function (error) {
                 delete $scope.progress;

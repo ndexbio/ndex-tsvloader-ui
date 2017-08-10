@@ -80,41 +80,52 @@ app.directive('graphPreview', function($timeout) {
             }
         });
 
+        scope.$watch('previewTarget', function() {
+            if(scope.ready){
+                if(scope.previewTarget.length > 20){
+                    scope.allNodes[2].label = scope.previewTarget.substr(0,20) + "..."; // + "... [" + scope.previewSourceColumn + "]";
+                } else {
+                    scope.allNodes[2].label = scope.previewTarget; // + " (" + scope.previewSourceColumn + ")";
+                }
+
+                var updateArray = [];
+                if (scope.allNodes.hasOwnProperty(2)) {
+                    updateArray.push(scope.allNodes[2]);
+                }
+
+                scope.nodes.update(updateArray);
+            }
+        });
+
         var nodeArray = [];
         var edgeArray = [];
 
-
-
-
         nodeArray.push({id: 1, label: "SOURCE", font: {size: 20}, borderWidth: 4,
-            color: {'background': "#507CEC", 'border': '#00FF00'}, x: 0, y: 0,
-            shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
+            color: {'background': "#13FFFF", 'border': '#2400FF'}, x: 0, y: 0,
+            shape: "square", size: 20, permaSize: 20, nodeDegree: 20});
 
         nodeArray.push({id: 2, label: "TARGET", font: {size: 20}, borderWidth: 4,
-            color: {'background': "#507CEC", 'border': '#00FF00'}, x: 300, y: 0,
+            color: {'background': "#57FF00", 'border': '#2400FF'}, x: 300, y: 0,
             shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
-
 
         //===============================
         // nodes for setting boundaries
         //===============================
-        nodeArray.push({id: 90, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 4,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -100, y:100,
-            shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
-        nodeArray.push({id: 91, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 4,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -100, y:-100,
-            shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
-        nodeArray.push({id: 92, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 4,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 400, y:100,
-            shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
-        nodeArray.push({id: 93, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 4,
-            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 400, y:-100,
-            shape: "dot", size: 20, permaSize: 20, nodeDegree: 20});
-
-
+        nodeArray.push({id: 90, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -45, y:40,
+            shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
+        nodeArray.push({id: 91, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: -45, y:-40,
+            shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
+        nodeArray.push({id: 92, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 345, y:40,
+            shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
+        nodeArray.push({id: 93, label: "", font: {size: 20, color: "#C0C0C0"}, borderWidth: 0,
+            color: {'background': "#FFFFFF", 'border': '#FFFFFF'}, x: 345, y:-40,
+            shape: "dot", size: 0, permaSize: 5, nodeDegree: 20});
 
         var edgeArray = [];
-        edgeArray.push({from: 1, to: 2, label: "Label",
+        edgeArray.push({from: 1, to: 2, label: "",
             font: {align: 'horizontal', size: 20, background: 'rgba(255,255,255,255)'},
             title: "title", zindex: 1050,
             color: {
@@ -124,10 +135,7 @@ app.directive('graphPreview', function($timeout) {
                 opacity: (0.6)//Math.abs(result.links[i].weight) - 0.15)
             },
             hidden: false
-        }
-        );
-
-
+        });
 
         scope.nodes = new vis.DataSet(nodeArray);
         scope.edges = new vis.DataSet(edgeArray);
