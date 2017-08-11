@@ -61,6 +61,12 @@ app.get('/getMessage/:myMessage', function(req, res) {
     res.send(myMessage);
 });
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.use('/upload', middleProxy({target: 'http://localhost:8183', changeOrigin: false, ws: true}));
 
 app.use("/plans", plansProxy);
